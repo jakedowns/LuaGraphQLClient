@@ -17,7 +17,7 @@ function queries.UpdateUsers()
 	-- Required: Args table is passed to the main Operation if not empty
 	gql.baseArgs = {}
 	-- Required
-	gql.responseArgs = {__isArray=true}
+	gql.responseArgs = {}
 
 	----------------------------------------
 	-- Example-only
@@ -40,6 +40,7 @@ function queries.UpdateUsers()
 		gql.baseArgs.update[i] = user
 	end
 	-- Response Args
+	gql.responseArgs["__isArray"] = true
 	table.insert(gql.responseArgs,"errors")
 	table.insert(gql.responseArgs,"successes")
 	----------------------------------------

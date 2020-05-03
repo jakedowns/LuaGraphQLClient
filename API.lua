@@ -20,7 +20,7 @@ function API.newRequest(queryName,args)
 	local q = Queries[queryName](args)
 	local payload = HttpService:JSONEncode({
 		--operationName = nil,
-		query = q.gql.getQueryString(),
+		query = q.getQueryString(),
 		--variables = {}
 	});
 	

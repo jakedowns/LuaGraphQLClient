@@ -1,4 +1,5 @@
-local HttpService = game:GetService("HttpService")
+local inspect = require('vendor/inspect')
+local CountedTable = require('vendor/CountedTable').fn
 
 local GraphQL = {}
 function GraphQL.new(isMutation)
@@ -126,7 +127,7 @@ function GraphQL.new(isMutation)
 					table.insert(q.parts,"}")
 				else
 					-- dictionary / hash
-					table.insert(q.parts,k.." {")
+					table.insert(q.parts, k .. " {")
 					for k2,tv in ipairs(v) do
 						parseResponseArgs(argLayer[k][k2])
 					end
@@ -154,15 +155,20 @@ function GraphQL.new(isMutation)
 		
 		table.insert(q.parts, "{")
 		table.insert(q.parts, q.base)
-		local json = HttpService:JSONEncode(q.baseArgs);
-		print("base args json",json)
-		if json ~= "{}" and json ~= "[]" then
+
+		--local json = HttpService:JSONEncode(q.baseArgs);
+		--print("base args json",json)
+	    --if json ~= "{}" and json ~= "[]" then
+	    local c = CountedTable(q.baseArgs)
+	    --print("look",c.totalCount,c.keyCount,c.indexCount,inspect(q.baseArgs))
+	    local total = 0
+		if q.baseArgs ~= nil and c.totalCount > 0 then
 			table.insert(q.parts, "(")
 			parseBaseArgs()
 			table.insert(q.parts, ")")	
 		end
 		table.insert(q.parts, "{")
-		ingestResponseArgs()
+		parseResponseArgs()
 		table.insert(q.parts, "}")
 		table.insert(q.parts, "}")
 		
