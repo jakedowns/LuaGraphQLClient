@@ -13,58 +13,6 @@ function GraphQL.new(args)
 	if args ~= nil and args.mutation then
 		q.mutation = true
 	end
-	-- TODO: can probably simplify these recursion methods even more! :D
-	-- local function onLoop(argLayer,parentWasArray,k,v)
-	-- 	local t = type(v)
-	-- 	local __isArray = false
-	-- 	if(t=="table" and v.__isArray ~= nil)then
-	-- 		__isArray = true
-	-- 	end
-		
-	-- 	if t == "table" then
-	-- 		if v.__isArray ~= nil then
-	-- 			if not parentWasArray then
-	-- 				table.insert(q.parts,k..":")
-	-- 			end
-	-- 			table.insert(q.parts,"[")
-	-- 			for i,av in pairs(v) do
-	-- 				onLoop(v,true,i,av)
-	-- 			end
-	-- 			table.insert(q.parts,"]")
-	-- 		else
-	-- 			-- dictionary / hash
-	-- 			if not parentWasArray then
-	-- 				table.insert(q.parts,k..":")
-	-- 			end
-	-- 			table.insert(q.parts,"{")
-	-- 			for k2,tv in pairs(v) do
-	-- 				onLoop(v,false,k2,tv)
-	-- 			end
-	-- 			table.insert(q.parts,"}")
-	-- 		end
-	-- 	elseif t == "function" then
-	-- 		error('cant encode a function')
-	-- 	else
-	-- 		local vtype = type(v)
-	-- 		local v_formatted = v
-	-- 		if k == '__isArray' then
-	-- 			-- no-op skip
-	-- 			-- return // continue?
-	-- 		else
-	-- 			if vtype == 'string' then
-	-- 				v_formatted = '"'..v..'"'
-	-- 			elseif vtype =='boolean' then
-	-- 				v_formatted = tostring(v)
-	-- 			end
-	-- 			if parentWasArray then
-	-- 				table.insert(q.parts, v_formatted)
-	-- 			else
-	-- 				-- K: "V"
-	-- 				table.insert(q.parts, k .. ":" .. v_formatted)
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
 	local function buildQueryArgs(k,v,parentWasArray)
 		if v == nil then
 			v = q.baseArgs

@@ -10,10 +10,13 @@ the module method `GraphQL.getQueryString` recursively parses the table and buil
 	```
 	function queries.ExampleOperation(args)
 		local query = { mutation = true } -- false if just a query
-		local gql = GraphQL.new(query.mutation)
+		local gql = GraphQL.new({
+			mutation = true,
+			op = "ExampleOperation"
+		})
 		gql.addBase("ExampleOperation")
 		gql.baseArgs = {}
-		gql.responseArgs = {}
+		gql.responseArgs = {__isArray=true}
 
 		-- Example Operation Arguments
 		local anArray = {__isArray=true, "red","orange","yellow"}
@@ -32,16 +35,14 @@ the module method `GraphQL.getQueryString` recursively parses the table and buil
 		table.insert(gql.responseArgs,"errors")
 		table.insert(gql.responseArgs,"successes")
 
-		-- store a reference so API can call q.gql.getQueryString
-		query.gql = gql
 		return gql
 	end
 	```
 	NOTE Array arguments should be flagged with a `__isArray=true` and in `responseArgs` something like `{ a b c }` is a psuedo-array as far as my little parser is concerned, so they need flagged too
-1. execute a query by using:
+2. execute a query by using:
 	```
 	local API = require(script.Parent.API)
-	local query = API.newRequest("UpdateUsers")
+	local query = API.newRequest("ExampleOperation")
 	local response = query.send() -- returns a JSON-decoded response
 	```
 
