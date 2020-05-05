@@ -4,6 +4,8 @@ author: [@VertPix on Roblox](https://www.roblox.com/users/414726123/profile) | [
 
 ---
 
+### **Demo**: [try it out here](https://repl.it/@jakedowns/ArcticUprightRobots)
+
 ## The gist: 
 a function for converting 2 Lua Tables into a valid GraphQL query string.
 
@@ -116,8 +118,11 @@ mutation {
 	local query = API.newRequest("ExampleOperation")
 	local response = query.send() -- returns a JSON-decoded response
 	```
-3. the example API module uses Roblox HttpService
-4. the API wraps the call:
+3. profit!!!
+
+### How it works
+- Note: the example API module uses Roblox HttpService
+- the API wraps the call:
 	```lua
 	local gql = Queries[queryName](args)
 	local payload = HttpService:JSONEncode({
