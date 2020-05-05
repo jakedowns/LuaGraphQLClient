@@ -2,80 +2,13 @@
 ## a minimal Lua module for crafting and performing basic GraphQL queries from Roblox
 author: [@VertPix on Roblox](https://www.roblox.com/users/414726123/profile) | [@jakedowns on Twitter](https://twitter.com/jakedowns)
 
----
+## **Interactive Demo**: [Play with a live sample on REPL.it](https://repl.it/@jakedowns/ArcticUprightRobots)
 
-### **Demo**: [try it out here](https://repl.it/@jakedowns/ArcticUprightRobots)
-
-## The gist: 
-a function for converting 2 Lua Tables into a valid GraphQL query string.
-
-the module method `GraphQL.getQueryString()` recursively parses 2 tables and builds a list of all the symbols for the big query string, then table.concats em all together.
-
-### Example:
-#### Input
-```lua
--- Instance of GraphQL.new({mutation:<bool>,op:<string>})
-{
-  base = "ExampleOperation", -- todo: rename this to operation / operationName
-  mutation = true, -- a bool flag
-
-  getQueryString = <function 1>, -- the string builder fn
-  parts = {}, -- gets populated by string builder
-  
-  -- todo rename this to operation or request arguments
-  baseArgs = {
-    colors = { "red", "orange", "yellow", __isArray = true},
-    preferences = {foo = "bar"},
-    status = "great"
-  },  
-  
-  responseArgs = { "errors", "successes",
-    __isArray = true,
-    resultSet = {
-      nestedArray = { "fieldA", "fieldB", "fieldC",
-        __isArray = true
-      }
-    },
-    secondaryResultSet = { "fieldA", "fieldC",
-      __isArray = true,
-      fieldB = { "property1", "property2",
-        __isArray = true
-      }
-    }
-  }
-}
-```
-#### Output
--- todo don't need to output commas in array here (;
-```graphql
-mutation {
-  ExampleOperation(
-    status: "great"
-    colors: ["red", "orange", "yellow"]
-    preferences: { foo: "bar" }
-  ) {
-    errors
-    successes
-    secondaryResultSet {
-      fieldA
-      fieldC
-      fieldB {
-        property1
-        property2
-      }
-    }
-    resultSet {
-      nestedArray {
-        fieldA
-        fieldB
-        fieldC
-      }
-    }
-  }
-}
-```
-
----
+## About: 
+This helper consists of 3 modules:
+- Queries: a table of query definitions keyed by name
+- GraphQL: a module for defining a Query/Mutation with a method for converting it into a valid GraphQL query string
+- API: a module for initializing a Query and firing the HTTP Post Async request
 
 ## Usage:
 1. define *Queries* in the `Queries.lua` module
@@ -112,7 +45,7 @@ mutation {
 	end
 	```
 	NOTE Array arguments should be flagged with a `__isArray=true` and in `responseArgs` something like `{ a b c }` is a psuedo-array as far as my little parser is concerned, so they need flagged too
-2. execute a query by using:
+2. execute a query by using the API and passing in a Query key name:
 	```
 	local API = require(script.Parent.API)
 	local query = API.newRequest("ExampleOperation")
@@ -120,8 +53,7 @@ mutation {
 	```
 3. profit!!!
 
-### How it works
-- Note: the example API module uses Roblox HttpService
+## How it works
 - the API wraps the call:
 	```lua
 	local gql = Queries[queryName](args)
@@ -131,6 +63,75 @@ mutation {
 		--variables = {}
 	});
 	```
+	Note: the example API module uses Roblox HttpService
+
+<details><summary>Example Input/Output:</summary>
+
+### Input
+```lua
+-- Instance of GraphQL.new({mutation:<bool>,op:<string>})
+{
+  base = "ExampleOperation", -- todo: rename this to operation / operationName
+  mutation = true, -- a bool flag
+
+  getQueryString = <function 1>, -- the string builder fn
+  parts = {}, -- gets populated by string builder
+  
+  -- todo rename this to operation or request arguments
+  baseArgs = {
+    colors = { "red", "orange", "yellow", __isArray = true},
+    preferences = {foo = "bar"},
+    status = "great"
+  },  
+  
+  responseArgs = { "errors", "successes",
+    __isArray = true,
+    resultSet = {
+      nestedArray = { "fieldA", "fieldB", "fieldC",
+        __isArray = true
+      }
+    },
+    secondaryResultSet = { "fieldA", "fieldC",
+      __isArray = true,
+      fieldB = { "property1", "property2",
+        __isArray = true
+      }
+    }
+  }
+}
+```
+### Output
+`-- todo don't need to output commas in array here (;`
+```graphql
+mutation {
+  ExampleOperation(
+    status: "great"
+    colors: ["red", "orange", "yellow"]
+    preferences: { foo: "bar" }
+  ) {
+    errors
+    successes
+    secondaryResultSet {
+      fieldA
+      fieldC
+      fieldB {
+        property1
+        property2
+      }
+    }
+    resultSet {
+      nestedArray {
+        fieldA
+        fieldB
+        fieldC
+      }
+    }
+  }
+}
+```
+
+</details>
+
 
 ---
 
@@ -140,4 +141,5 @@ mutation {
 - support for `operationName` and `variables`
 - full OAUTH2 negotiation example
 - make a generic non-roblox example
+- remove commas from array output
 
