@@ -85,17 +85,18 @@ This helper consists of 3 modules:
     status = "great"
   },  
   
-  responseArgs = { "errors", "successes",
-    __isArray = true,
-    resultSet = {
-      nestedArray = { "fieldA", "fieldB", "fieldC",
-        __isArray = true
-      }
+  responseArgs = { 
+    "errors", 
+    "successes",
+    primaryResultSet = {
+      nestedArray = { "fieldA", "fieldB", "fieldC" }
     },
-    secondaryResultSet = { "fieldA", "fieldC",
-      __isArray = true,
-      fieldB = { "property1", "property2",
-        __isArray = true
+    secondaryResultSet = { 
+      "fieldA", 
+      "fieldC"
+      fieldB = { 
+      	"property1", 
+	"property2"
       }
     }
   }
@@ -120,7 +121,7 @@ mutation {
         property2
       }
     }
-    resultSet {
+    primaryResultSet {
       nestedArray {
         fieldA
         fieldB
