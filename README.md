@@ -142,4 +142,6 @@ mutation {
 - full OAUTH2 negotiation example
 - make a generic non-roblox example
 - remove commas from array output
+- make response args __isArray by default
+- make request args table by default, not nil
 
