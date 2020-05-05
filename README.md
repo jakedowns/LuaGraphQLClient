@@ -144,4 +144,5 @@ mutation {
 - remove commas from array output
 - make response args __isArray by default
 - make request args table by default, not nil
+- maybe add a heuristic to determine if something is an array automagically
 
