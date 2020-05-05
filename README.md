@@ -31,20 +31,21 @@ This helper consists of 3 modules:
 		table.insert(gql.responseArgs,"successes") -- [String]
 
 		gql.responseArgs["resultSet"] = {
-			nestedArray = {__isArray=true,"fieldA", "fieldB", "fieldC"}
+			nestedArray = {"fieldA", "fieldB", "fieldC"}
 		}
 		
 		gql.responseArgs["secondaryResultSet"] = {
-			__isArray = true,
 			"fieldA",
-			fieldB = { __isArray = true, "property1", "property2" },
+			fieldB = { "property1", "property2" },
 			"fieldC" 
 		}
 
 		return gql
 	end
 	```
-	NOTE Array arguments should be flagged with a `__isArray=true` and in `responseArgs` something like `{ a b c }` is a psuedo-array as far as my little parser is concerned, so they need flagged too
+	NOTE 
+	any Arrays (non-keyed / integer keyed tables) in `requestArgs` should be flagged with a `__isArray=true` 
+	`responseArgs` are automatically assumed arrays
 2. execute a query by using the API and passing in a Query key name:
 	```
 	local API = require(script.Parent.API)
